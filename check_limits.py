@@ -60,21 +60,21 @@ def convert_to_calculation_value(parameter, value, unit):
 
 def is_battery_paremeter_ok(parameter, value, unit, language):
   value = convert_to_calculation_value(parameter, value, unit)
-  if value < limit[parameter]['min'] or value > limit[parameter]['max']:
-    warning_text = warning_message[language][parameter]['out_of_range']
-    print_warning(warning_text)
-    return False
   warning_text = is_lower_state_of_parameter_tolerant(parameter, value, language)
   print_warning(warning_text)
   warning_text = is_higher_state_of_parameter_tolerant(parameter, value, language)
   print_warning(warning_text)
+  if value < limit[parameter]['min'] or value > limit[parameter]['max']:
+    warning_text = warning_message[language][parameter]['out_of_range']
+    print_warning(warning_text)
+    return False
   return True
 
 def battery_is_ok(parameter, language):
   parameter_verdict = {}
   for attribute in parameter:
     parameter_verdict[attribute] = is_battery_paremeter_ok(attribute, parameter[attribute]['value'], parameter[attribute]['unit'], language)
-  if parameter_verdict['temperature'] == False or parameter_verdict['soc'] == False or parameter_verdict['charge_rate'] == 'False':
+  if False in [parameter_verdict['temperature'], parameter_verdict['soc'], parameter_verdict['charge_rate']]:
     return False
   return True
 
