@@ -41,10 +41,13 @@ def print_warning(warning_text):
     return None 
   print(warning_text)
 
-def is_state_of_parameter_tolerant(parameter, value, language):
+def is_lower_state_of_parameter_tolerant(parameter, value, language):
   if value >= limit[parameter]['min'] and value <= (limit[parameter]['min'] + threshold[parameter]):
     warning_text = warning_message[language][parameter]['min']
     return warning_text
+  return 'No Warning'
+
+def is_higher_state_of_parameter_tolerant(parameter, value, language):
   if value <= limit[parameter]['max'] and value >= (limit[parameter]['max'] - threshold[parameter]):
     warning_text = warning_message[language][parameter]['max']
     return warning_text
@@ -61,7 +64,9 @@ def is_battery_paremeter_ok(parameter, value, unit, language):
     warning_text = warning_message[language][parameter]['out_of_range']
     print_warning(warning_text)
     return False
-  warning_text = is_state_of_parameter_tolerant(parameter, value, language)
+  warning_text = is_lower_state_of_parameter_tolerant(parameter, value, language)
+  print_warning(warning_text)
+  warning_text = is_higher_state_of_parameter_tolerant(parameter, value, language)
   print_warning(warning_text)
   return True
 
